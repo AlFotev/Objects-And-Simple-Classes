@@ -1,0 +1,136 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Boxes
+{
+    class Program
+    {
+        //Create a class Box, which will represent a rectangular box.The Box should have UpperLeft (Point), UpperRight(Point), BottomLeft(Point),
+        //BottomRight(Point). 
+
+        
+        public class Point
+        {
+            public int X { set; get; }
+            public int Y { set; get; }
+
+            public static double CalculateWidth(Point UpperLeft, Point UpperRight)
+            {
+                var distance = Math.Sqrt(Math.Pow(UpperLeft.X - UpperRight.X, 2) + Math.Pow(UpperLeft.Y - UpperRight.Y, 2));
+                return distance;
+             }
+
+             public static double CalculateHeight(Point BottomLeft, Point UpperLeft)
+            {
+                var distance = Math.Sqrt(Math.Pow(BottomLeft.X - UpperLeft.X, 2) + Math.Pow(BottomLeft.Y - UpperLeft.Y, 2));
+                return distance;
+            }
+    }
+
+
+        public class Box
+        {
+            public Point UpperLeft { set; get; }
+            public Point UpperRight { set; get; }
+            public Point BottomLeft { set; get; }
+            public Point BottomRight { set; get; }
+            public int Height { get; set; }
+            public int Width { get; set; }
+            public int Perimeter { get; set; }
+            public int Area { get; set; }
+
+            public static int CalculatePerimeter(int width, int height) {
+               var perimeter =  (2 * width + 2 * height);
+                return perimeter;
+            }
+            public static int CalculateArea(int width, int height) {
+                var area = width  * height;
+                return area;
+            }
+           
+
+
+        }
+        //Create, or use from the Lab, the class Point which has X(int) and Y(int)  coordinates in 2D space.
+        //Move the CalculateDistance() method in the Point class, exactly as it is. Then use Point.CalculateDistance(point1, point2) signature, to use the method.
+        //Create 2 methods in the Box class:
+        //public static int CalculatePerimeter(int width, int height)
+        //public static int CalculateArea(int width, int height). 
+        //Make them return an integer, representing the perimeter and area of the box.
+        //The formulas are respectively  (2 * Width + 2 * Height) and(Width* Height). 
+        //The Width is the distance between the UpperLeft and the UpperRight Points, and ALSO  the Bottomleft and the BottomRight Points.
+        //The Height is the distance between the UpperLeft and the BottomLeft Points, and ALSO  the UpperRight and the BottomRight Points.
+        //You will receive several input lines in the following format:
+        //{ X1}:{Y1
+        //    } | {X2
+        //}:{Y2} | {X3}:{Y3} | {X4}:{Y4}
+        //Those will be the coordinates to UpperLeft, UpperRight, BottomLeft and BottomRight(IN THE SAME ORDER).
+        //When you receive the command end. You must print all Boxes in the following format:
+        //Box: {width}, {height}
+        // Perimeter: {perimeter}
+        // Area: {area}
+
+        static void Main(string[] args)
+        {
+            var inputLine = Console.ReadLine();
+            var listOfBoxes = new List<Box>();
+
+            while (inputLine != "end")
+            {
+                var listOfCoordinates = inputLine.Split(new[] { ' ' , '|' ,':'}, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
+
+                var pointA = new Point()
+                {
+                    X = listOfCoordinates[0],
+                    Y = listOfCoordinates[1]
+                };
+                var pointB = new Point()
+                {
+                    X = listOfCoordinates[2],
+                    Y = listOfCoordinates[3]
+                };
+                var pointC = new Point()
+                {
+                    X = listOfCoordinates[4],
+                    Y = listOfCoordinates[5]
+                };
+                var pointD = new Point()
+                {
+                    X = listOfCoordinates[6],
+                    Y = listOfCoordinates[7]
+                };
+
+                var width = Point.CalculateWidth(pointA, pointB);
+                var height = Point.CalculateWidth(pointC, pointA);
+
+
+                var box = new Box()
+                {
+                    UpperLeft = pointA,
+                    UpperRight = pointB,
+                    BottomLeft = pointC,
+                    BottomRight = pointD,
+                    Width = (int)width,
+                    Height = (int)height,
+                    Perimeter = Box.CalculatePerimeter((int)width , (int)height),
+                    Area = Box.CalculateArea((int)width, (int)height)
+                };
+
+                listOfBoxes.Add(box);
+
+                inputLine = Console.ReadLine();
+            }
+
+            foreach (var box in listOfBoxes)
+            {
+                Console.WriteLine($"Box: {box.Width}, {box.Height}");
+                Console.WriteLine( $"Perimeter: {box.Perimeter}" ); 
+                Console.WriteLine($"Area: {box.Area}");
+            }
+
+        }
+    }
+}
