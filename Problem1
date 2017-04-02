@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Pr1Exercises
+{
+   public class SolOfPr1
+    {
+        public class Exercises
+        {
+            public string Topic { get; set; }
+            public string CourseName { get; set; }
+            public string JudgeContestLink { get; set; }
+            public List<string> Problems { get; set; }
+        }
+
+        static void Main()
+        {
+
+
+           var collOfExc = new List<Exercises>();
+            var inputLine = Console.ReadLine();
+
+            while (inputLine != "go go go")
+            {
+                var inputSplited = inputLine.Split(new string [] { " -> "},StringSplitOptions.RemoveEmptyEntries).ToList();
+                var topic = inputSplited[0];
+                var courseName = inputSplited[1];
+                var judgeContestLink = inputSplited[2];
+                var listOfExc = inputSplited.Last().Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                var currentExercise = new Exercises() {
+                    Topic = topic,
+                    CourseName = courseName,
+                    JudgeContestLink = judgeContestLink,
+                    Problems = new List<string>()
+                };
+                foreach (var exc in listOfExc)
+                {
+                   currentExercise.Problems.Add(exc);
+                }
+                collOfExc.Add(currentExercise);
+                inputLine = Console.ReadLine();
+            }
+
+            ///////
+            var counter = 0;
+            foreach (var exc in collOfExc)
+            {
+                Console.WriteLine($"Exercises: {exc.Topic}");
+                Console.WriteLine($"Problems for exercises and homework for the \"{exc.CourseName}\" course @ SoftUni.");
+                Console.WriteLine($"Check your solutions here: { exc.JudgeContestLink}");
+                foreach (var exerciseName in exc.Problems)
+                {
+                    counter++;
+                    Console.WriteLine($"{counter}. {exerciseName}");
+                }
+                counter = 0;
+            }
+        }
+    }
+}
