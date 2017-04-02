@@ -1,0 +1,188 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Animals
+{
+    class Program
+    {
+
+        //            You have been given the task to create classes for several sophisticated animals.
+        //Create a class Dog which has a Name(string), Age(int) and NumberOfLegs(int).
+        public class Dog
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+            public int NumberOfLegs { get; set; }
+            //Create a method in each class which is called public void ProduceSound(). The method should print on the console a string depending on the class:
+            //•	If it’s a Dog, you should print “I’m a Distinguishedog, and I will now produce a distinguished sound! Bau Bau.”
+            public void ProduceSound()
+            {
+                Console.WriteLine("I'm a Distinguishedog, and I will now produce a distinguished sound! Bau Bau.");
+            }
+        }
+        //Create a class Cat which has a Name(string), Age(int) and IntelligenceQuotient(int).
+        public class Cat
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+            public int IntelligenceQuotient { get; set; }
+            //•	It it’s a Cat, you should print “I’m an Aristocat, and I will now produce an aristocratic sound! Myau Myau.”
+            public void ProduceSound()
+            {
+                Console.WriteLine("I'm an Aristocat, and I will now produce an aristocratic sound! Myau Myau.");
+            }
+        }
+        //Create a class Snake which has a Name(string), Age(int) and CrueltyCoefficient(int).
+        public class Snake
+        {
+            public string Name { get; set; }
+            public int Age { get; set; }
+            public int CrueltyCoefficient { get; set; }
+            //•	If it’s a Snake, you should print “I’m a Sophistisnake, and I will now produce a sophisticated sound! Honey, I’m home.”
+            public void ProduceSound()
+            {
+                Console.WriteLine("I'm a Sophistisnake, and I will now produce a sophisticated sound! Honey, I'm home.");
+            }
+        }
+
+
+        static void Main()
+        {
+
+
+            //Now for the real deal.You will receive several input commands, which will register animals or make them produce sounds,
+            //until you receive the command “I’m your Huckleberry”.
+            //The commands will be in the following format:
+            //{class} {name} {age} {parameter}
+            //The class will be either “Dog”, “Cat” or “Snake”. The name will be a simple string, which can contain any ASCII character BUT space.The age will be an integer.The parameter, will be an integer. Depending on the class it would either be number of legs, IQ, or cruelty coefficient.
+            //Register each animal, and keep them in collections, by your choice, so that you can ACCESS THEM BY NAME. You will most likely need 3 collections, to store the different animals inside them.
+            //Between the register commands you might receive a command in the following format:
+            //talk { name}
+            //You must then make the animal with the given name, produce a sound.
+
+            var inputLine = Console.ReadLine();
+            var dogs = new List<Dog>();
+            var cats = new List<Cat>();
+            var snakes = new List<Snake>();
+
+            while (inputLine != "I'm your Huckleberry")
+            {
+                var inputList = inputLine.Split(' ').ToList();
+
+                if (inputList[0] != "talk")
+                {
+                    var theClass = inputList[0];
+                    var theName = inputList[1];
+                    var theAge = int.Parse(inputList[2]);
+                    var theParam = int.Parse(inputList[3]);
+
+                    switch (theClass)
+                    {
+                        case "Dog":
+                            var currentDog = new Dog()
+                            {
+                                Name = theName,
+                                Age = theAge,
+                                NumberOfLegs = theParam
+                            };
+                            dogs.Add(currentDog);
+                            break;
+
+                        case "Cat":
+                            var currentCat = new Cat()
+                            {
+                                Name = theName,
+                                Age = theAge,
+                                IntelligenceQuotient = theParam
+                            };
+                            cats.Add(currentCat);
+                            break;
+
+                        case "Snake":
+                            var currentSnake = new Snake()
+                            {
+                                Name = theName,
+                                Age = theAge,
+                                CrueltyCoefficient = theParam
+                            };
+                            snakes.Add(currentSnake);
+                            break;
+                        default:
+                            Console.WriteLine("Fuck off");
+                            break;
+                    }
+
+                }
+                else
+                {
+                    var summonedName = inputList[1];
+                    //    foreach (var dog in dogs)
+                    //    {
+                    //        if (dog.Name == summonedName)
+                    //        {
+                    //          dog.ProduceSound();
+                    //        }
+                    //    }
+                    //    foreach (var snake in snakes)
+                    //    {
+                    //        if (snake.Name == summonedName)
+                    //        {
+                    //            snake.ProduceSound();
+                    //        }
+                    //    }
+                    //    foreach (var cat in cats)
+                    //    {
+                    //        if (cat.Name == summonedName)
+                    //        {
+                    //            cat.ProduceSound();
+                    //        }
+                    //    }
+                    //}
+
+                    foreach (var dog in dogs.Where(dog => dog.Name == summonedName))
+                    {
+                        dog.ProduceSound();
+                    }
+                    foreach (var cat in cats.Where(cat => cat.Name == summonedName))
+                    {
+                        cat.ProduceSound();
+                    }
+                    foreach (var snake in snakes.Where(snake => snake.Name == summonedName))
+                    {
+                       snake.ProduceSound();
+                    }
+                }
+                    inputLine = Console.ReadLine();
+            }
+
+            //When you receive the ending command, you should print every animal in the following format:
+            //•	If it’s a Dog, you should print “Dog: { name}, Age: {age}, Number Of Legs: {numberOfLegs}”
+            //•	It it’s a Cat, you should print “Cat: {name}, Age: {age}, IQ: {intelligenceQontient}”
+            //•	If it’s a Snake, you should print “Snake: {name}, Age: {age}, Cruelty: {crueltyCoefficient}”
+            //Print first the Dogs, then the Cats, and lastly – The Snakes.
+            //Constraints
+            //•	You can assume that there will be no duplicate names (even in different animals).
+            //•	All input data will be valid.There will be no invalid input lines.
+            //•	The name in the talk command, will always be existent.
+
+
+            foreach (var dog in dogs)
+            {
+                Console.WriteLine($"Dog: {dog.Name}, Age: {dog.Age}, Number Of Legs: {dog.NumberOfLegs}");
+            }
+            foreach (var cat in cats)
+            {
+                Console.WriteLine($"Cat: {cat.Name}, Age: {cat.Age}, IQ: {cat.IntelligenceQuotient}");           
+            }
+            foreach (var snake in snakes)
+            {
+                Console.WriteLine($"Snake: {snake.Name}, Age: {snake.Age}, Cruelty: {snake.CrueltyCoefficient}");            
+            }
+            
+
+        }
+    }
+}
