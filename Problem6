@@ -1,0 +1,165 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Messages
+{
+    public class Program
+    {
+        // Create a class User, which has a Username(string), and ReceivedMessages(Collection of Messages). 
+        public class User
+        {
+          public string Username { set; get; }
+            public List<Message> SendMessages { set; get; }
+            public List<Message> ReceivedMessages { set; get; }
+        }
+
+        //Create a class Message, which has a Content(string) and a Sender(User).
+
+        public class Message {
+            public string Content { set; get; }
+            public User Sender { set; get; }
+            public string Receiver { set; get; }
+        }
+
+//You will have to store a messaging history for every user.The input consists of 2 commands:
+//“register { username}”
+//“{senderUsername} send {recipientUsername} {content}”
+//The register command, registers a user with the given username.
+//The send command, sends a message, from the given sender, to the given recipient, with the given content.That means that you must add the message to the recipient’s ReceivedMessages.
+//If even one of the given names does NOT exist, ignore the command.
+//When you receive the command “exit” you must end the input sequence. After that you will receive 2 usernames, separated by a space. 
+//You must print all messages, sent, between the two users, corresponding to the given usernames.The messages should be printed in a specified way.You should print first a message SENT from the first user, then a message SENT from the second user, then a message from the first user, and so on.If one of the collections of messages has more elements than the other, just print the remaining elements from it.
+//The first user’s messages must be printed in the following way:
+//“{ firstUser}: {content}”
+//The second user’s message must be printed in the following way:
+//“{content} :{secondUser}”
+//When you print the whole output, it should look like this:
+//{firstUser}: {content1}
+//{content1} :{secondUser}
+//{firstUser}: {content2}
+//{content2} :{secondUser}
+//. . . 
+//In case there are NO messages between the two users, print “No messages”.
+
+        public static void Main()
+        {
+            var inputLine = Console.ReadLine();
+            var registeredUsers = new Dictionary<string,User>();
+
+
+            while (inputLine != "exit")
+            {
+                
+                var inputList = inputLine.Split(' ').ToList();
+
+                ////registering users
+                if (inputList.Count == 2)
+                {
+                    var user = inputList[1];
+                    var currentUser = new User()
+                    {
+                        Username = user,
+                        SendMessages = new List<Message>(),
+                        ReceivedMessages = new List<Message>()
+                    };
+                    if (!registeredUsers.ContainsKey(user))
+                    {
+                        registeredUsers[user] = currentUser;
+                    }
+                }
+                //// 
+                if (inputList.Count == 4)
+                {
+                    var sender = inputList[0];
+                    var receiver = inputList[2];
+                    var message = inputList[3];
+                  
+
+                    if (registeredUsers.ContainsKey(sender) && registeredUsers.ContainsKey(receiver))
+                    {
+                        var currentMessage = new Message()
+                        {
+                            Content = message,
+                            Sender = registeredUsers[sender],
+                            Receiver = receiver
+                        };
+
+                        registeredUsers[sender].SendMessages.Add(currentMessage);
+                        registeredUsers[receiver].ReceivedMessages.Add(currentMessage);
+                    }
+
+                }
+                inputLine = Console.ReadLine();
+            }
+
+
+
+            var coresponders = Console.ReadLine().Split(' ').ToList();
+            var firstUser = coresponders[0];
+            var secondUser = coresponders[1];
+            var messagesOfSenderToReceiver = new List<Message>();
+            var messagesOfReceiverToSender = new List<Message>();
+
+
+            if (registeredUsers.ContainsKey(firstUser) && registeredUsers.ContainsKey(secondUser))
+            {              
+                    var listOfSender = registeredUsers[firstUser].SendMessages;
+                    var receivedMesOfSender = registeredUsers[firstUser].ReceivedMessages;
+
+                foreach (var sendM in listOfSender)
+                    {
+                        if (sendM.Receiver == secondUser)
+                        {
+                            messagesOfSenderToReceiver.Add(sendM);
+                        }                      
+                    }
+                foreach (var sendM in receivedMesOfSender)
+                {
+                    if (sendM.Sender.Username == secondUser)
+                    {
+                       messagesOfReceiverToSender.Add(sendM);
+                    }
+                }
+
+
+            }
+
+           var lines = Math.Max(messagesOfSenderToReceiver.Count, messagesOfReceiverToSender.Count);
+            if (messagesOfSenderToReceiver.Count > 0 && messagesOfReceiverToSender.Count > 0)
+            {
+
+                for (int i = 0; i < lines; i++)
+                {
+                    Console.WriteLine($"{messagesOfSenderToReceiver[i].Sender.Username}: {messagesOfSenderToReceiver[i].Content}");
+                    if (i < messagesOfReceiverToSender.Count)
+                    {
+                        Console.WriteLine($"{messagesOfReceiverToSender[i].Content} :{messagesOfReceiverToSender[i].Sender.Username}");
+                    }
+
+                }
+
+            }
+            else if (messagesOfSenderToReceiver.Count > 0 && messagesOfReceiverToSender.Count == 0)
+            {
+                for (int i = 0; i < lines; i++)
+                {
+                    Console.WriteLine($"{messagesOfSenderToReceiver[i].Sender.Username}: {messagesOfSenderToReceiver[i].Content}");
+                }
+            }
+            else if (messagesOfSenderToReceiver.Count == 0 && messagesOfReceiverToSender.Count > 0)
+            {
+                for (int i = 0; i < lines; i++)
+                {
+                    Console.WriteLine($"{messagesOfReceiverToSender[i].Content} :{messagesOfReceiverToSender[i].Sender.Username}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No messages");
+            }
+        }
+    }
+}
