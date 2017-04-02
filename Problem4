@@ -1,0 +1,79 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WebSites
+{
+    public class Websites
+    {
+        // You have been tasked to create an ordered database of websites.
+        //For the task you will need to create a class Website, which will have a Host, a Domain and Queries.
+        public class Website {
+            public string Host { get; set; }
+            public string Domain { get; set; }
+            public List<string> Queries { get; set; }
+        }
+        //The Host and the Domain are simple strings.
+        //The Queries, is Collections of strings.
+
+        static void Main()
+        {
+
+            //You will be given several input lines in the following format:
+            //{ host} | {domain} | {query1,query2. . .}
+            //Note: There will always be a host and a domain, but there might NOT be ANY queries.
+           
+            var inputLine = Console.ReadLine();
+            var listOfWebsites = new List<Website>();
+
+            while (inputLine != "end")
+            {
+                var listOfInput = inputLine.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var host = listOfInput[0];
+                var domain = listOfInput[1];
+                if (listOfInput.Count > 2)
+                {
+                  
+                    var listOfQueries = listOfInput[2].Split(new[] { ',' } , StringSplitOptions.RemoveEmptyEntries).ToList();
+                    var currentWebsite = new Website() {
+                        Host = host,
+                        Domain = domain,
+                        Queries = listOfQueries
+                    };
+                    listOfWebsites.Add(currentWebsite);
+                }
+                else
+                {
+                    var currentWebsite = new Website()
+                    {
+                        Host = host,
+                        Domain = domain
+                    };
+                    listOfWebsites.Add(currentWebsite);
+                }
+                inputLine = Console.ReadLine();             
+            }
+
+            //The input sequence ends, when you receive the command end. Then you must print all websites in the following format:
+            //https://www.{host}.{domain}/query?=[{query1]&[{query2}]&[query3]. . .
+            //In case there are NO queries, just print:
+            //https://www.{host}.{domain}
+
+            foreach (var site in listOfWebsites)
+            {
+                if (site.Queries != null)
+                {
+                    Console.WriteLine($"https://www.{site.Host}.{site.Domain}/query?=[{string.Join("]&[", site.Queries)}]");
+                }
+                else
+                {
+                    Console.WriteLine($"https://www.{site.Host}.{site.Domain}");
+                }
+             
+            }
+            
+        }
+    }
+}
