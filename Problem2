@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Pr1Exercises
+{
+    public class SolOfPr1
+    {
+        public class BankAccount
+        {
+           public string Name { get; set; }
+           public string Bank { get; set; }
+           public decimal Balance { get; set; }
+        }
+
+        static void Main()
+        {
+
+
+            var collOfAcc = new List<BankAccount>();
+            var inputLine = Console.ReadLine();
+
+            while (inputLine != "end")
+            {
+                var inputSplited = inputLine.Split(new string[] { " | " }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var accName = inputSplited[1];
+                var bank = inputSplited[0];
+                var balance = decimal.Parse(inputSplited[2]);
+
+                var currentAcc = new BankAccount()
+                {
+                    Name = accName,
+                    Bank = bank,
+                    Balance = balance
+                };
+                collOfAcc.Add(currentAcc);
+
+                inputLine = Console.ReadLine();
+            }
+
+            foreach (var acc in collOfAcc.OrderByDescending(acc => acc.Balance).ThenBy(acc => acc.Bank.Length))
+            {
+                Console.WriteLine($"{acc.Name} -> {acc.Balance} ({acc.Bank})");
+            }
+
+        }
+    }
+}
